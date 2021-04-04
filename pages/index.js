@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable func-names */
+/* eslint-disable no-console */
 /* eslint-disable no-trailing-spaces */
 import React from 'react';
-import styled from 'styled-components';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -8,8 +10,11 @@ import db from '../db.json';
 import Widget from '../src/components/Widget';
 import QuizLogo from '../src/components/QuizLogo';
 import QuizBackground from '../src/components/QuizBackground';
+import QuizContainer from '../src/components/QuizContainer';
 import Footer from '../src/components/Footer';
 import GitHubCorner from '../src/components/GitHubCorner';
+import Input from '../src/components/Input';
+import Button from '../src/components/Button';
 
 // const BackgroundImage = styled.div`
 //   background-image: url(${db.bg});
@@ -18,7 +23,7 @@ import GitHubCorner from '../src/components/GitHubCorner';
 //   background-position: center;
 // `;
 
-export const QuizContainer = styled.div`
+/* export const QuizContainer = styled.div`
   width: 100%;
   max-width: 350px;
   padding-top: 45px;
@@ -27,7 +32,7 @@ export const QuizContainer = styled.div`
     margin: auto;
     padding: 15px;
   }
-`;
+`; */
 
 export default function Home() {
   const router = useRouter();
@@ -45,24 +50,25 @@ export default function Home() {
             <h1>{db.title}</h1>
           </Widget.Header>
           <Widget.Content>
-            <form onSubmit={function(event) {
+            <form onSubmit={function (event) {
               event.preventDefault();
               router.push(`/quiz?name=${name}`);
               console.log('Fazendo uma submmissão por meio do react');
             }}
             >
-              <input 
+              <Input 
+                name="nomeDoUsuario"
                 placeholder="Diz aí seu nome" 
-                onChange={function(event) {
+                value={name}
+                onChange={(event) => {
                   console.log(event.target.value);
                   // State
                   setName(event.target.value);
                 }}
               />
-              <button type="submit" disabled={name.length === 0}>
-                Jogar 
-                {name}
-              </button>
+              <Button type="submit" disabled={name.length === 0}>
+                {`Jogar ${name}`}
+              </Button>
             </form>
           </Widget.Content>
         </Widget>
