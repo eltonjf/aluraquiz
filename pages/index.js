@@ -60,11 +60,7 @@ export default function Home() {
                 name="nomeDoUsuario"
                 placeholder="Diz aí seu nome" 
                 value={name}
-                onChange={(event) => {
-                  console.log(event.target.value);
-                  // State
-                  setName(event.target.value);
-                }}
+                onChange={(event) => { setName(event.target.value); }}
               />
               <Button type="submit" disabled={name.length === 0}>
                 {`Jogar ${name}`}

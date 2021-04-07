@@ -1,8 +1,7 @@
-// eslint-disable-next-line linebreak-style
+/* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
 /* eslint-disable linebreak-style */
 import React from 'react';
-
 import db from '../db.json';
 import Widget from '../src/components/Widget';
 import QuizLogo from '../src/components/QuizLogo';
@@ -29,6 +28,7 @@ function QuestionWidget({
   questionIndex,
   totalQuestions,
 }) {
+  const questionId = `question__${questionIndex}`;
   return (
     <Widget>
       <Widget.Header>
@@ -53,10 +53,28 @@ function QuestionWidget({
         <p>
           {question.description}
         </p>
+        <form>
+          {question.alternatives.map((alternative, alternativeIndex) => {
+            const alternativeId = `alternative__${alternativeIndex}`;
+            return (
+              <Widget.Topic
+                as="label"
+                htmlFor={alternativeId}
+              >
+                <input
+                  id={alternativeId}
+                  name={questionId}
+                  type="radio"
+                />
+                {alternative}
+              </Widget.Topic>
+            );
+          })}
 
-        <Button type="submit">
-          Confirmar
-        </Button>
+          <Button type="submit">
+            Confirmar
+          </Button>
+        </form>
       </Widget.Content>
     </Widget>
   );
