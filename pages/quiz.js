@@ -29,7 +29,11 @@ function QuestionWidget({
   totalQuestions,
   onSubmit,
 }) {
+  const [selectedAlternative, setSelectedAlternative] = React.useState(undefined);
+  const [isQuestionSubmited, setIsQuestionSubmited] = React.useState(false);
   const questionId = `question__${questionIndex}`;
+  const isCorrect = selectedAlternative === question.answer;
+  const hasAlternativeSelected = selectedAlternative !== undefined;
   return (
     <Widget>
       <Widget.Header>
@@ -57,7 +61,12 @@ function QuestionWidget({
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmit();
+            setIsQuestionSubmited(true);
+            setTimeout(() => {
+              onSubmit();
+              setSelectedAlternative(undefined);
+              setIsQuestionSubmited(false);
+            }, 3 * 1000);
           }}
         >
           {question.alternatives.map((alternative, alternativeIndex) => {
@@ -65,11 +74,14 @@ function QuestionWidget({
             return (
               <Widget.Topic
                 as="label"
+                key={alternativeId}
                 htmlFor={alternativeId}
               >
                 <input
                   id={alternativeId}
                   name={questionId}
+                  checked={hasAlternativeSelected}
+                  onChange={() => setSelectedAlternative(alternativeIndex)}
                   type="radio"
                 />
                 {alternative}
@@ -77,9 +89,11 @@ function QuestionWidget({
             );
           })}
 
-          <Button type="submit">
+          <Button type="submit" disabled={!hasAlternativeSelected}>
             Confirmar
           </Button>
+          {isQuestionSubmited && isCorrect && <p>Você acertou!</p>}
+          {isQuestionSubmited && !isCorrect && <p>Você errou!</p>}
         </form>
       </Widget.Content>
     </Widget>
@@ -113,6 +127,7 @@ export default function QuizPage() {
     const nextQuestion = questionIndex + 1;
     if (nextQuestion < totalQuestions) {
       setCurrentQuestion(nextQuestion);
+
     } else {
       setScreenState(screenStates.RESULT);
     }
